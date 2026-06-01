@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phương Anh Villa – Homestay Hồ Bơi Vũng Tàu</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand: #F5EDD8;
+    --sand-dark: #EAD9B8;
+    --ocean: #1B4F72;
+    --ocean-light: #2E86AB;
+    --coral: #E07B54;
+    --coral-dark: #C4603A;
+    --green: #2D6A4F;
+    --cream: #FDFAF4;
+    --dark: #1A1208;
+    --text-mid: #4A3F2F;
+    --gold: #C9A84C;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.35;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 20px 5%;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(253,250,244,0.95);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    padding: 14px 5%;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: white; letter-spacing: 0.02em;
+    text-decoration: none; transition: color 0.3s;
+  }
+  nav.scrolled .nav-logo { color: var(--ocean); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 0.875rem; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; text-decoration: none;
+    color: rgba(255,255,255,0.9); transition: color 0.3s;
+  }
+  nav.scrolled .nav-links a { color: var(--text-mid); }
+  .nav-links a:hover { color: var(--coral); }
+  .nav-cta {
+    background: var(--coral); color: white !important;
+    padding: 10px 22px; border-radius: 50px;
+    font-weight: 600 !important; letter-spacing: 0.05em !important;
+    transition: background 0.3s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--coral-dark) !important; transform: translateY(-1px); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(160deg, rgba(27,79,114,0.75) 0%, rgba(26,18,8,0.6) 60%, rgba(224,123,84,0.3) 100%),
+      url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1800&q=80') center/cover no-repeat;
+    transform: scale(1.05);
+    transition: transform 8s ease;
+  }
+  .hero:hover .hero-bg { transform: scale(1.0); }
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center; padding: 0 20px; max-width: 860px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white; padding: 8px 20px; border-radius: 50px;
+    font-size: 0.8rem; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 28px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 700; color: white; line-height: 1.1;
+    margin-bottom: 12px;
+    animation: fadeUp 0.8s 0.15s ease both;
+  }
+  .hero-title em { color: var(--gold); font-style: italic; }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem); color: rgba(255,255,255,0.85);
+    font-weight: 300; line-height: 1.6; max-width: 580px; margin: 0 auto 40px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .hero-actions {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.45s ease both;
+  }
+  .btn-primary {
+    background: var(--coral); color: white;
+    padding: 16px 36px; border-radius: 50px;
+    font-size: 1rem; font-weight: 600; text-decoration: none;
+    letter-spacing: 0.04em; transition: all 0.3s;
+    box-shadow: 0 8px 30px rgba(224,123,84,0.4);
+  }
+  .btn-primary:hover { background: var(--coral-dark); transform: translateY(-2px); box-shadow: 0 12px 35px rgba(224,123,84,0.5); }
+  .btn-secondary {
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255,255,255,0.5);
+    color: white; padding: 16px 36px; border-radius: 50px;
+    font-size: 1rem; font-weight: 500; text-decoration: none;
+    letter-spacing: 0.04em; transition: all 0.3s;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+  .hero-scroll {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: rgba(255,255,255,0.6); font-size: 0.75rem; letter-spacing: 0.1em;
+    text-transform: uppercase; animation: fadeUp 1s 0.8s ease both;
+  }
+  .scroll-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+    animation: scrollPulse 2s ease infinite;
+  }
+  .hero-stats {
+    position: absolute; bottom: 60px; right: 5%;
+    display: flex; flex-direction: column; gap: 16px;
+    animation: fadeUp 1s 0.6s ease both;
+  }
+  .stat-pill {
+    background: rgba(255,255,255,0.12); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white; padding: 12px 20px; border-radius: 12px;
+    text-align: right;
+  }
+  .stat-pill strong { display: block; font-size: 1.4rem; font-family: 'Cormorant Garamond', serif; font-weight: 700; }
+  .stat-pill span { font-size: 0.75rem; opacity: 0.8; }
+
+  /* ─── SECTION BASE ─── */
+  section { padding: 100px 5%; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--coral);
+    margin-bottom: 12px; display: block;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700; line-height: 1.2; color: var(--ocean);
+  }
+  .section-title em { color: var(--coral); font-style: italic; }
+
+  /* ─── HIGHLIGHTS ─── */
+  .highlights { background: var(--ocean); overflow: hidden; position: relative; }
+  .highlights::before {
+    content: '';
+    position: absolute; top: -60px; left: -60px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: rgba(201,168,76,0.08);
+  }
+  .highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px; max-width: 1200px; margin: 0 auto;
+  }
+  .highlight-card {
+    padding: 44px 32px; position: relative; overflow: hidden;
+    transition: background 0.3s;
+  }
+  .highlight-card:hover { background: rgba(255,255,255,0.05); }
+  .highlight-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .highlight-icon {
+    font-size: 2.2rem; margin-bottom: 20px; display: block;
+    filter: drop-shadow(0 4px 12px rgba(224,123,84,0.4));
+  }
+  .highlight-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 600; color: white;
+    margin-bottom: 10px;
+  }
+  .highlight-card p { font-size: 0.9rem; color: rgba(255,255,255,0.65); line-height: 1.6; }
+
+  /* ─── ABOUT ─── */
+  .about { background: var(--cream); }
+  .about-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .about-images { position: relative; height: 540px; }
+  .about-img-main {
+    position: absolute; top: 0; left: 0; width: 75%; height: 80%;
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(27,79,114,0.2);
+  }
+  .about-img-main img { width: 100%; height: 100%; object-fit: cover; }
+  .about-img-secondary {
+    position: absolute; bottom: 0; right: 0; width: 58%; height: 50%;
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(27,79,114,0.15);
+    border: 6px solid var(--cream);
+  }
+  .about-img-secondary img { width: 100%; height: 100%; object-fit: cover; }
+  .about-badge-float {
+    position: absolute; top: 50%; left: 65%; transform: translate(-50%, -50%);
+    background: var(--coral); color: white;
+    width: 110px; height: 110px; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; box-shadow: 0 10px 30px rgba(224,123,84,0.4);
+    font-family: 'Cormorant Garamond', serif;
+    z-index: 3;
+  }
+  .about-badge-float strong { font-size: 2rem; font-weight: 700; line-height: 1; }
+  .about-badge-float span { font-size: 0.7rem; opacity: 0.9; }
+  .about-text .section-title { margin-bottom: 24px; }
+  .about-text p { color: var(--text-mid); line-height: 1.8; margin-bottom: 18px; font-size: 0.97rem; }
+  .about-features { display: flex; flex-direction: column; gap: 14px; margin-top: 32px; }
+  .about-feature {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px 20px; background: var(--sand);
+    border-radius: 12px; border-left: 3px solid var(--coral);
+  }
+  .about-feature-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+  .about-feature-text strong { display: block; font-size: 0.9rem; font-weight: 600; color: var(--ocean); }
+  .about-feature-text span { font-size: 0.83rem; color: var(--text-mid); }
+
+  /* ─── GALLERY ─── */
+  .gallery { background: var(--sand); }
+  .gallery-header { max-width: 1200px; margin: 0 auto 48px; }
+  .gallery-grid {
+    max-width: 1200px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(3, 220px);
+    gap: 12px;
+  }
+  .gallery-item {
+    border-radius: 16px; overflow: hidden; position: relative; cursor: pointer;
+  }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+  .gallery-item:hover img { transform: scale(1.06); }
+  .gallery-item-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(27,79,114,0.7), transparent);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: flex-end; padding: 20px;
+  }
+  .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+  .gallery-item-overlay span { color: white; font-size: 0.85rem; font-weight: 500; }
+  .g1 { grid-column: 1/6; grid-row: 1/3; }
+  .g2 { grid-column: 6/9; grid-row: 1/2; }
+  .g3 { grid-column: 9/13; grid-row: 1/2; }
+  .g4 { grid-column: 6/10; grid-row: 2/3; }
+  .g5 { grid-column: 10/13; grid-row: 2/3; }
+  .g6 { grid-column: 1/5; grid-row: 3/4; }
+  .g7 { grid-column: 5/9; grid-row: 3/4; }
+  .g8 { grid-column: 9/13; grid-row: 3/4; }
+
+  /* ─── AMENITIES ─── */
+  .amenities { background: var(--cream); }
+  .amenities-inner { max-width: 1200px; margin: 0 auto; }
+  .amenities-header { text-align: center; margin-bottom: 60px; }
+  .amenities-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+  }
+  .amenity-card {
+    background: white; border-radius: 20px; padding: 36px 28px;
+    border: 1px solid rgba(0,0,0,0.06);
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .amenity-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--coral), var(--gold));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+  }
+  .amenity-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(27,79,114,0.12); }
+  .amenity-card:hover::before { transform: scaleX(1); }
+  .amenity-icon { font-size: 2.4rem; margin-bottom: 18px; display: block; }
+  .amenity-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 600; color: var(--ocean); margin-bottom: 10px; }
+  .amenity-card p { font-size: 0.88rem; color: var(--text-mid); line-height: 1.6; }
+  .amenity-tag {
+    display: inline-block; margin-top: 14px;
+    background: var(--sand); color: var(--coral);
+    font-size: 0.75rem; font-weight: 600; padding: 4px 12px;
+    border-radius: 20px; letter-spacing: 0.05em;
+  }
+
+  /* ─── LOCATION ─── */
+  .location { background: var(--ocean); color: white; overflow: hidden; position: relative; }
+  .location::before {
+    content: '';
+    position: absolute; bottom: -100px; right: -100px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: rgba(201,168,76,0.06);
+  }
+  .location-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .location .section-label { color: var(--gold); }
+  .location .section-title { color: white; }
+  .location p { color: rgba(255,255,255,0.75); line-height: 1.8; margin: 20px 0; font-size: 0.95rem; }
+  .location-points { list-style: none; display: flex; flex-direction: column; gap: 16px; margin-top: 32px; }
+  .location-points li {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px; border-radius: 12px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.92rem; color: rgba(255,255,255,0.85);
+  }
+  .location-points li span.dot { font-size: 1.1rem; }
+  .map-container {
+    border-radius: 24px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+    height: 400px; position: relative;
+  }
+  .map-container iframe { width: 100%; height: 100%; border: none; }
+
+  /* ─── PRICING ─── */
+  .pricing { background: var(--sand); }
+  .pricing-inner { max-width: 1200px; margin: 0 auto; }
+  .pricing-header { text-align: center; margin-bottom: 60px; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; }
+  .pricing-card {
+    background: white; border-radius: 24px; padding: 44px 36px;
+    border: 1px solid rgba(0,0,0,0.07);
+    position: relative; overflow: hidden; transition: all 0.3s;
+  }
+  .pricing-card:hover { transform: translateY(-4px); box-shadow: 0 24px 70px rgba(27,79,114,0.12); }
+  .pricing-card.featured {
+    background: var(--ocean); color: white;
+    box-shadow: 0 20px 60px rgba(27,79,114,0.35);
+    border-color: transparent;
+  }
+  .pricing-card.featured:hover { transform: translateY(-6px); }
+  .featured-ribbon {
+    position: absolute; top: 24px; right: -30px;
+    background: var(--coral); color: white;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+    padding: 6px 40px; transform: rotate(45deg);
+    text-transform: uppercase;
+  }
+  .pricing-type { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--coral); margin-bottom: 10px; }
+  .pricing-card.featured .pricing-type { color: var(--gold); }
+  .pricing-name { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700; color: var(--ocean); margin-bottom: 8px; }
+  .pricing-card.featured .pricing-name { color: white; }
+  .pricing-price { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 700; color: var(--dark); line-height: 1; margin: 24px 0 8px; }
+  .pricing-card.featured .pricing-price { color: var(--gold); }
+  .pricing-price sup { font-size: 1.2rem; vertical-align: super; }
+  .pricing-price sub { font-size: 1rem; font-weight: 400; color: var(--text-mid); }
+  .pricing-card.featured .pricing-price sub { color: rgba(255,255,255,0.6); }
+  .pricing-note { font-size: 0.8rem; color: var(--text-mid); margin-bottom: 28px; }
+  .pricing-card.featured .pricing-note { color: rgba(255,255,255,0.6); }
+  .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  .pricing-features li { display: flex; gap: 10px; font-size: 0.88rem; color: var(--text-mid); align-items: flex-start; }
+  .pricing-card.featured .pricing-features li { color: rgba(255,255,255,0.8); }
+  .pricing-features li::before { content: '✓'; color: var(--coral); font-weight: 700; flex-shrink: 0; }
+  .pricing-card.featured .pricing-features li::before { color: var(--gold); }
+  .btn-book {
+    width: 100%; padding: 16px; border-radius: 50px;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer; border: none;
+    background: var(--sand); color: var(--ocean);
+    transition: all 0.3s; letter-spacing: 0.04em;
+    text-decoration: none; display: block; text-align: center;
+  }
+  .btn-book:hover { background: var(--coral); color: white; transform: translateY(-1px); }
+  .pricing-card.featured .btn-book { background: var(--coral); color: white; }
+  .pricing-card.featured .btn-book:hover { background: var(--coral-dark); }
+
+  /* ─── CTA ─── */
+  .cta-section {
+    background:
+      linear-gradient(135deg, rgba(27,79,114,0.92) 0%, rgba(26,18,8,0.85) 100%),
+      url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1600&q=80') center/cover;
+    text-align: center; padding: 120px 5%;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.15), transparent 70%);
+  }
+  .cta-inner { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; }
+  .cta-section .section-label { color: var(--gold); }
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700;
+    color: white; line-height: 1.2; margin-bottom: 20px;
+  }
+  .cta-title em { color: var(--gold); font-style: italic; }
+  .cta-sub { color: rgba(255,255,255,0.75); font-size: 1.05rem; line-height: 1.7; margin-bottom: 48px; }
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px; }
+  .btn-zalo {
+    background: #0068FF; color: white;
+    padding: 18px 36px; border-radius: 50px;
+    font-size: 1rem; font-weight: 600; text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 8px 30px rgba(0,104,255,0.35); transition: all 0.3s;
+  }
+  .btn-zalo:hover { background: #0057D6; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,104,255,0.45); }
+  .btn-call {
+    background: var(--coral); color: white;
+    padding: 18px 36px; border-radius: 50px;
+    font-size: 1rem; font-weight: 600; text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 8px 30px rgba(224,123,84,0.35); transition: all 0.3s;
+  }
+  .btn-call:hover { background: var(--coral-dark); transform: translateY(-2px); }
+  .cta-info { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
+  .cta-info-item { color: rgba(255,255,255,0.7); font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
+  .cta-info-item strong { color: white; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--dark); color: rgba(255,255,255,0.6);
+    padding: 60px 5% 32px;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px;
+    margin-bottom: 48px;
+  }
+  .footer-brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 700; color: white; margin-bottom: 14px;
+  }
+  .footer-brand-name span { color: var(--coral); }
+  footer p { font-size: 0.88rem; line-height: 1.7; }
+  .footer-col h4 {
+    color: white; font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--coral); }
+  .footer-contact-item { display: flex; gap: 10px; margin-bottom: 12px; font-size: 0.88rem; align-items: flex-start; }
+  .footer-contact-item span:first-child { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .footer-bottom {
+    max-width: 1200px; margin: 0 auto;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px; font-size: 0.8rem;
+  }
+  .footer-socials { display: flex; gap: 14px; }
+  .social-btn {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem;
+    transition: all 0.3s;
+  }
+  .social-btn:hover { background: var(--coral); color: white; transform: translateY(-2px); }
+
+  /* ─── FLOATING CONTACT ─── */
+  .floating-contacts {
+    position: fixed; bottom: 28px; right: 24px; z-index: 200;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .float-btn {
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 1.4rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2); transition: all 0.3s;
+    position: relative;
+  }
+  .float-btn:hover { transform: scale(1.1); }
+  .float-btn.zalo { background: #0068FF; }
+  .float-btn.phone { background: var(--coral); }
+  .float-tooltip {
+    position: absolute; right: 64px; top: 50%; transform: translateY(-50%);
+    background: var(--dark); color: white;
+    padding: 6px 14px; border-radius: 8px; font-size: 0.78rem;
+    white-space: nowrap; opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .float-btn:hover .float-tooltip { opacity: 1; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; height: 48px; }
+    50% { opacity: 0.3; height: 32px; }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.15s; }
+  .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .about-inner, .location-inner { grid-template-columns: 1fr; }
+    .about-images { height: 320px; }
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+    }
+    .g1,.g2,.g3,.g4,.g5,.g6,.g7,.g8 {
+      grid-column: auto; grid-row: auto;
+    }
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    .hero-stats { display: none; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 70px 5%; }
+    .gallery-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Phương Anh Villa</a>
+  <ul class="nav-links">
+    <li><a href="#about">Giới thiệu</a></li>
+    <li><a href="#gallery">Hình ảnh</a></li>
+    <li><a href="#amenities">Tiện ích</a></li>
+    <li><a href="#pricing">Bảng giá</a></li>
+    <li><a href="#contact" class="nav-cta">Đặt phòng</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🌊 Homestay Hồ Bơi – Vũng Tàu</div>
+    <h1 class="hero-title">Phương Anh <em>Villa</em></h1>
+    <p class="hero-sub">Không gian riêng tư 550m² — Hồ bơi, BBQ, Karaoke — Chỉ 1 phút ra bãi biển Thùy Vân</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">📞 Đặt phòng ngay</a>
+      <a href="#gallery" class="btn-secondary">Xem hình ảnh</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-pill">
+      <strong>550m²</strong>
+      <span>Diện tích sử dụng</span>
+    </div>
+    <div class="stat-pill">
+      <strong>18+</strong>
+      <span>Người lớn & em bé</span>
+    </div>
+    <div class="stat-pill">
+      <strong>6</strong>
+      <span>Phòng ngủ riêng</span>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Khám phá</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- HIGHLIGHTS -->
+<section class="highlights" id="highlights">
+  <div class="highlights-grid">
+    <div class="highlight-card reveal">
+      <span class="highlight-icon">🏊</span>
+      <h3>Hồ Bơi Riêng 40m²</h3>
+      <p>Hồ bơi private với vòi phun massage, khu BBQ bên cạnh — hoàn hảo cho tiệc nhóm</p>
+    </div>
+    <div class="highlight-card reveal reveal-delay-1">
+      <span class="highlight-icon">🌊</span>
+      <h3>1 Phút Ra Biển</h3>
+      <p>Đi xe 1 phút đến bãi tắm Thùy Vân, Quảng Trường Bãi Sau — vị trí đắc địa</p>
+    </div>
+    <div class="highlight-card reveal reveal-delay-2">
+      <span class="highlight-icon">🎤</span>
+      <h3>Karaoke & Bida Miễn Phí</h3>
+      <p>Dàn karaoke hiện đại + bàn bida — giải trí không giới hạn cho cả nhóm</p>
+    </div>
+    <div class="highlight-card reveal reveal-delay-3">
+      <span class="highlight-icon">👨‍👩‍👧‍👦</span>
+      <h3>Nguyên Villa Riêng</h3>
+      <p>Thuê nguyên căn — 6 phòng ngủ, 5 toilet, sức chứa 18 người lớn + em bé</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-images reveal">
+      <div class="about-img-main">
+        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=900&q=80" alt="Villa tổng thể">
+      </div>
+      <div class="about-img-secondary">
+        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&q=80" alt="Hồ bơi">
+      </div>
+      <div class="about-badge-float">
+        <strong>F8</strong>
+        <span>Thái Văn Lung</span>
+        <span>Vũng Tàu</span>
+      </div>
+    </div>
+    <div class="about-text reveal reveal-delay-1">
+      <span class="section-label">Về chúng tôi</span>
+      <h2 class="section-title">Nghỉ dưỡng <em>trọn gói</em><br>tại trung tâm Vũng Tàu</h2>
+      <p>Phương Anh Villa là không gian homestay cao cấp tọa lạc tại vị trí vàng Phường Vũng Tàu — chỉ 1 phút lái xe ra bãi biển Thùy Vân. Với diện tích 550m², villa mang đến trải nghiệm nghỉ dưỡng hoàn toàn riêng tư cho gia đình, nhóm bạn hay đồng nghiệp.</p>
+      <p>Từ hồ bơi 40m² với vòi massage, sân BBQ, karaoke hiện đại đến bếp đầy đủ dụng cụ — mọi thứ bạn cần cho một kỳ nghỉ hoàn hảo đều có sẵn ngay tại đây.</p>
+      <div class="about-features">
+        <div class="about-feature">
+          <span class="about-feature-icon">🛏️</span>
+          <div class="about-feature-text">
+            <strong>06 phòng ngủ • 08 giường lớn</strong>
+            <span>Sức chứa 18 người lớn + em bé, có nệm thêm linh hoạt</span>
+          </div>
+        </div>
+        <div class="about-feature">
+          <span class="about-feature-icon">🚗</span>
+          <div class="about-feature-text">
+            <strong>Bãi đậu xe 2–5 ô tô</strong>
+            <span>Chỗ đậu xe rộng rãi ngay trong khuôn viên villa</span>
+          </div>
+        </div>
+        <div class="about-feature">
+          <span class="about-feature-icon">🍳</span>
+          <div class="about-feature-text">
+            <strong>Bếp hiện đại + chế biến theo yêu cầu</strong>
+            <span>Đầy đủ dụng cụ nấu ăn, gia vị • Nhận nấu thuê (phụ thu)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="gallery-header">
+    <span class="section-label reveal">Hình ảnh thực tế</span>
+    <h2 class="section-title reveal reveal-delay-1">Không gian <em>đẹp hơn</em> mọi lời miêu tả</h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item g1 reveal">
+      <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&q=80" alt="Phòng ngủ master">
+      <div class="gallery-item-overlay"><span>🛏️ Phòng ngủ master</span></div>
+    </div>
+    <div class="gallery-item g2 reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=600&q=80" alt="Hồ bơi">
+      <div class="gallery-item-overlay"><span>🏊 Hồ bơi 40m²</span></div>
+    </div>
+    <div class="gallery-item g3 reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80" alt="Bếp">
+      <div class="gallery-item-overlay"><span>🍳 Bếp hiện đại</span></div>
+    </div>
+    <div class="gallery-item g4 reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" alt="Sân BBQ">
+      <div class="gallery-item-overlay"><span>🔥 Sân BBQ cạnh hồ bơi</span></div>
+    </div>
+    <div class="gallery-item g5 reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=600&q=80" alt="Phòng ngủ 2">
+      <div class="gallery-item-overlay"><span>🛏️ Phòng ngủ đôi</span></div>
+    </div>
+    <div class="gallery-item g6 reveal">
+      <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80" alt="Phòng tắm">
+      <div class="gallery-item-overlay"><span>🛁 Toilet có bồn tắm</span></div>
+    </div>
+    <div class="gallery-item g7 reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=700&q=80" alt="Phòng khách">
+      <div class="gallery-item-overlay"><span>🛋️ Phòng khách Karaoke</span></div>
+    </div>
+    <div class="gallery-item g8 reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="View biển">
+      <div class="gallery-item-overlay"><span>🌊 Gần bãi Thùy Vân</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- AMENITIES -->
+<section class="amenities" id="amenities">
+  <div class="amenities-inner">
+    <div class="amenities-header">
+      <span class="section-label reveal">Tiện nghi đầy đủ</span>
+      <h2 class="section-title reveal reveal-delay-1">Tất cả những gì bạn <em>cần</em></h2>
+    </div>
+    <div class="amenities-grid">
+      <div class="amenity-card reveal">
+        <span class="amenity-icon">🏊‍♂️</span>
+        <h3>Hồ Bơi + Vòi Massage</h3>
+        <p>Hồ bơi riêng 40m² với vòi phun massage thư giãn, chỉ dành riêng cho khách của villa</p>
+        <span class="amenity-tag">MIỄN PHÍ</span>
+      </div>
+      <div class="amenity-card reveal reveal-delay-1">
+        <span class="amenity-icon">🔥</span>
+        <h3>Sân BBQ Ngoài Trời</h3>
+        <p>Khu vực BBQ rộng rãi ngay cạnh hồ bơi, đầy đủ dụng cụ nướng, bàn ghế tiệc</p>
+        <span class="amenity-tag">MIỄN PHÍ</span>
+      </div>
+      <div class="amenity-card reveal reveal-delay-2">
+        <span class="amenity-icon">🎤</span>
+        <h3>Karaoke Hiện Đại</h3>
+        <p>Dàn karaoke chất lượng cao tại phòng khách, bài hát phong phú — hát thả ga không giới hạn</p>
+        <span class="amenity-tag">MIỄN PHÍ</span>
+      </div>
+      <div class="amenity-card reveal">
+        <span class="amenity-icon">🎱</span>
+        <h3>Bàn Bida</h3>
+        <p>Bàn bida tiêu chuẩn để giải trí giữa những buổi tiệc — trò chơi không thể thiếu!</p>
+        <span class="amenity-tag">MIỄN PHÍ</span>
+      </div>
+      <div class="amenity-card reveal reveal-delay-1">
+        <span class="amenity-icon">🍽️</span>
+        <h3>Bếp Đủ Dụng Cụ</h3>
+        <p>Bếp hiện đại, đầy đủ nồi chảo, gia vị, tủ lạnh lớn — tự nấu thoải mái cho cả nhóm</p>
+        <span class="amenity-tag">NHẬN NẤU THUÊ</span>
+      </div>
+      <div class="amenity-card reveal reveal-delay-2">
+        <span class="amenity-icon">🛁</span>
+        <h3>05 Toilet — 01 Bồn Tắm</h3>
+        <p>5 toilet riêng biệt, trong đó 1 toilet cao cấp có bồn tắm ngâm thư giãn</p>
+        <span class="amenity-tag">5 PHÒNG WC</span>
+      </div>
+      <div class="amenity-card reveal">
+        <span class="amenity-icon">🌬️</span>
+        <h3>Máy Lạnh & WiFi Tốc Độ Cao</h3>
+        <p>Toàn bộ phòng ngủ có máy lạnh, WiFi mạnh phủ toàn villa</p>
+        <span class="amenity-tag">MIỄN PHÍ</span>
+      </div>
+      <div class="amenity-card reveal reveal-delay-1">
+        <span class="amenity-icon">💆</span>
+        <h3>Dầu Gội, Sữa Tắm, Khăn Tắm</h3>
+        <p>Đầy đủ amenities: dầu gội, sữa tắm, máy sấy tóc, khăn tắm sạch cho mỗi khách</p>
+        <span class="amenity-tag">TIÊU CHUẨN KHÁCH SẠN</span>
+      </div>
+      <div class="amenity-card reveal reveal-delay-2">
+        <span class="amenity-icon">🚗</span>
+        <h3>Bãi Đỗ Xe 2–5 Ô Tô</h3>
+        <p>Bãi đỗ xe rộng rãi ngay trong khuôn viên, an toàn và thoải mái cho cả nhóm đông</p>
+        <span class="amenity-tag">MIỄN PHÍ</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="location" id="location">
+  <div class="location-inner">
+    <div class="reveal">
+      <span class="section-label">Vị trí đắc địa</span>
+      <h2 class="section-title">Trung tâm <em>mọi tiện ích</em><br>Vũng Tàu</h2>
+      <p>F8 Thái Văn Lung, Phường Vũng Tàu — địa chỉ vàng cách mọi điểm vui chơi chỉ vài phút di chuyển.</p>
+      <ul class="location-points">
+        <li><span class="dot">🌊</span> <span>1 phút đến bãi tắm <strong>Thùy Vân & Quảng Trường Bãi Sau</strong></span></li>
+        <li><span class="dot">🐟</span> <span>Gần <strong>Chợ hải sản</strong> tươi sống Vũng Tàu</span></li>
+        <li><span class="dot">🛒</span> <span>Gần <strong>Lotte Mart</strong>, siêu thị, trung tâm mua sắm</span></li>
+        <li><span class="dot">🍜</span> <span>Xung quanh <strong>nhà hàng, quán ăn</strong> đa dạng</span></li>
+        <li><span class="dot">🎂</span> <span>Gần tiệm <strong>Bánh bông lan</strong> nổi tiếng Vũng Tàu</span></li>
+        <li><span class="dot">🏖️</span> <span>Dễ dàng tiếp cận <strong>Bãi Trước, Bãi Sau</strong></span></li>
+      </ul>
+    </div>
+    <div class="map-container reveal reveal-delay-1">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.0!2d107.0707!3d10.3469!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDIwJzQ4LjgiTiAxMDfCsDA0JzE0LjUiRQ!5e0!3m2!1svi!2svn!4v1620000000000"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="pricing-inner">
+    <div class="pricing-header">
+      <span class="section-label reveal">Bảng giá</span>
+      <h2 class="section-title reveal reveal-delay-1">Giá <em>trọn gói</em> — Không phát sinh</h2>
+      <p class="reveal reveal-delay-2" style="color: var(--text-mid); margin-top: 12px; font-size: 0.95rem;">Check-in 14:00 • Check-out 12:00 trưa hôm sau</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card reveal">
+        <div class="pricing-type">Ngày thường</div>
+        <div class="pricing-name">Weekday</div>
+        <div class="pricing-price"><sup>từ</sup> 5<span style="font-size:2rem">tr</span><sub>/đêm</sub></div>
+        <div class="pricing-note">Thứ 2 – Thứ 6</div>
+        <ul class="pricing-features">
+          <li>Nguyên villa — 6 phòng ngủ</li>
+          <li>Hồ bơi + BBQ miễn phí</li>
+          <li>Karaoke + Bida miễn phí</li>
+          <li>Đến 18 người lớn</li>
+          <li>Bãi đỗ xe 2–5 ô tô</li>
+        </ul>
+        <a href="tel:0975025445" class="btn-book">Liên hệ đặt phòng</a>
+      </div>
+      <div class="pricing-card featured reveal reveal-delay-1">
+        <div class="featured-ribbon">Phổ biến</div>
+        <div class="pricing-type">Cuối tuần</div>
+        <div class="pricing-name">Weekend</div>
+        <div class="pricing-price"><sup>từ</sup> 7<span style="font-size:2rem">tr</span><sub>/đêm</sub></div>
+        <div class="pricing-note">Thứ 6, 7, CN & Lễ</div>
+        <ul class="pricing-features">
+          <li>Nguyên villa — 6 phòng ngủ</li>
+          <li>Hồ bơi + BBQ miễn phí</li>
+          <li>Karaoke + Bida miễn phí</li>
+          <li>Đến 18 người lớn + em bé</li>
+          <li>Bãi đỗ xe 2–5 ô tô</li>
+          <li>Hỗ trợ nấu ăn theo yêu cầu</li>
+        </ul>
+        <a href="tel:0975025445" class="btn-book">Đặt ngay hôm nay</a>
+      </div>
+      <div class="pricing-card reveal reveal-delay-2">
+        <div class="pricing-type">Dài ngày</div>
+        <div class="pricing-name">Ưu đãi 3+ đêm</div>
+        <div class="pricing-price" style="font-size: 1.8rem; margin-top: 24px;">Giảm 10–15%</div>
+        <div class="pricing-note" style="margin-bottom: 24px;">Liên hệ để nhận báo giá tốt nhất</div>
+        <ul class="pricing-features">
+          <li>Giảm giá đặc biệt từ 3 đêm</li>
+          <li>Toàn bộ tiện ích miễn phí</li>
+          <li>Hỗ trợ tổ chức sinh nhật, tiệc</li>
+          <li>Tư vấn lịch trình Vũng Tàu</li>
+          <li>Hỗ trợ 24/7 qua Zalo</li>
+        </ul>
+        <a href="https://zalo.me/0975025445" class="btn-book" target="_blank">Nhắn Zalo nhận ưu đãi</a>
+      </div>
+    </div>
+    <p class="reveal" style="text-align:center; margin-top: 28px; color: var(--text-mid); font-size: 0.85rem;">
+      ⚠️ Giá trên là giá tham khảo, vui lòng liên hệ để xác nhận giá chính xác theo thời điểm và số lượng khách
+    </p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-inner">
+    <span class="section-label">Liên hệ đặt phòng</span>
+    <h2 class="cta-title">Sẵn sàng cho <em>kỳ nghỉ</em><br>hoàn hảo của bạn?</h2>
+    <p class="cta-sub">Liên hệ ngay để kiểm tra lịch trống và nhận báo giá tốt nhất. Chúng tôi phản hồi trong vòng 15 phút!</p>
+    <div class="cta-buttons">
+      <a href="tel:0975025445" class="btn-call">
+        📞 Gọi ngay: 0975 025 445
+      </a>
+      <a href="https://zalo.me/0975025445" class="btn-zalo" target="_blank">
+        💬 Nhắn Zalo ngay
+      </a>
+    </div>
+    <div class="cta-info">
+      <div class="cta-info-item">📍 <span>F8 Thái Văn Lung, <strong>Phường Vũng Tàu, HCM</strong></span></div>
+      <div class="cta-info-item">⏰ <span>Check-in <strong>14:00</strong> • Check-out <strong>12:00</strong></span></div>
+      <div class="cta-info-item">💳 <span>Đặt cọc <strong>qua chuyển khoản</strong></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">Phương Anh <span>Villa</span></div>
+      <p>Homestay hồ bơi cao cấp tại Vũng Tàu — Không gian riêng tư, tiện nghi đẳng cấp, vị trí đắc địa chỉ 1 phút ra biển Thùy Vân.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Khám phá</h4>
+      <ul class="footer-links">
+        <li><a href="#about">Giới thiệu</a></li>
+        <li><a href="#gallery">Hình ảnh</a></li>
+        <li><a href="#amenities">Tiện ích</a></li>
+        <li><a href="#pricing">Bảng giá</a></li>
+        <li><a href="#location">Vị trí</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Liên hệ</h4>
+      <div class="footer-contact-item"><span>📞</span><span>0975 025 445</span></div>
+      <div class="footer-contact-item"><span>📍</span><span>F8 Thái Văn Lung, Phường Vũng Tàu, HCM</span></div>
+      <div class="footer-contact-item"><span>⏰</span><span>Check-in: 14:00<br>Check-out: 12:00</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Phương Anh Villa. All rights reserved.</span>
+    <div class="footer-socials">
+      <a href="#" class="social-btn">f</a>
+      <a href="#" class="social-btn">📷</a>
+      <a href="https://zalo.me/0975025445" class="social-btn">Z</a>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING CONTACTS -->
+<div class="floating-contacts">
+  <a href="https://zalo.me/0975025445" class="float-btn zalo" target="_blank">
+    <span>Z</span>
+    <div class="float-tooltip">Nhắn Zalo ngay</div>
+  </a>
+  <a href="tel:0975025445" class="float-btn phone">
+    <span>📞</span>
+    <div class="float-tooltip">0975 025 445</div>
+  </a>
+</div>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
